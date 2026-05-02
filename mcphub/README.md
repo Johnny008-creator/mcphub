@@ -2,6 +2,8 @@
 
 An open-source MCP (Model Context Protocol) server registry with automated quality scoring.
 
+![MCPHub Dashboard](https://raw.githubusercontent.com/Johnny008-creator/mcphub/master/preview.png)
+
 ## Features
 
 - **Registry API**: Submit and discover MCP servers via a RESTful API.
