@@ -1,0 +1,14 @@
+{
+  "name": "mcphub",
+  "version": "1.0.0",
+  "description": "CLI for MCPHub registry",
+  "main": "index.js",
+  "bin": {
+    "mcphub": "./index.js"
+  },
+  "dependencies": {
+    "axios": "^1.6.8",
+    "commander": "^12.0.0",
+    "chalk": "^4.1.2"
+  }
+}

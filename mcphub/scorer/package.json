@@ -1,0 +1,9 @@
+{
+  "name": "mcphub-scorer",
+  "version": "1.0.0",
+  "main": "index.js",
+  "dependencies": {
+    "sqlite3": "^5.1.7",
+    "simple-git": "^3.24.0"
+  }
+}

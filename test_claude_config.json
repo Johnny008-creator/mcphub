@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "test-server": {
+      "command": "node",
+      "args": [
+        "run",
+        "test-server"
+      ]
+    }
+  }
+}

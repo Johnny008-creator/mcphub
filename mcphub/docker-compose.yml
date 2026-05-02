@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  registry:
+    build: 
+      context: .
+      dockerfile: registry/Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./data:/app/data
+    environment:
+      - DATABASE_PATH=/app/data/mcphub.db
+      - PORT=3000
+    restart: always
+
+  scorer:
+    build:
+      context: .
+      dockerfile: scorer/Dockerfile
+    volumes:
+      - ./data:/app/data
+    environment:
+      - DATABASE_PATH=/app/data/mcphub.db
+    restart: always
+    depends_on:
+      - registry

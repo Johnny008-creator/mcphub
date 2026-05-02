@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCPHub | MCP Server Registry</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --text: #f8fafc;
+            --text-dim: #94a3b8;
+            --primary: #38bdf8;
+            --secondary: #818cf8;
+            --success: #4ade80;
+            --warning: #fbbf24;
+            --danger: #f87171;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 1rem;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .search-bar {
+            background: var(--card-bg);
+            border: 1px solid #334155;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            width: 100%;
+            max-width: 400px;
+            color: white;
+        }
+
+        .server-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .server-card {
+            background: var(--card-bg);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            transition: transform 0.2s, border-color 0.2s;
+            border: 1px solid transparent;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .server-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--primary);
+        }
+
+        .score-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-weight: bold;
+            font-size: 0.875rem;
+        }
+
+        .score-high { background: var(--success); color: #064e3b; }
+        .score-mid { background: var(--warning); color: #78350f; }
+        .score-low { background: var(--danger); color: #7f1d1d; }
+
+        .server-name {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .server-desc {
+            color: var(--text-dim);
+            font-size: 0.875rem;
+            line-height: 1.5;
+            height: 3rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .modal-content {
+            background: var(--bg);
+            width: 90%;
+            max-width: 600px;
+            padding: 2rem;
+            border-radius: 1rem;
+            border: 1px solid #334155;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .btn {
+            background: var(--primary);
+            color: #0f172a;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-secondary {
+            background: #334155;
+            color: white;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        input, textarea {
+            background: var(--card-bg);
+            border: 1px solid #334155;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            color: white;
+        }
+
+        .score-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .score-bar-bg {
+            background: #334155;
+            height: 0.5rem;
+            border-radius: 1rem;
+            width: 100%;
+            margin-top: 0.25rem;
+        }
+
+        .score-bar-fill {
+            background: var(--primary);
+            height: 100%;
+            border-radius: 1rem;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📦 MCPHub</h1>
+            <input type="text" id="searchInput" class="search-bar" placeholder="Search servers...">
+            <button class="btn" onclick="openModal('submitModal')">Submit Server</button>
+        </header>
+
+        <div id="serverList" class="server-grid">
+            <!-- Servers will be loaded here -->
+        </div>
+    </div>
+
+    <!-- Submit Modal -->
+    <div id="submitModal" class="modal">
+        <div class="modal-content">
+            <h2>Submit New MCP Server</h2>
+            <form id="submitForm">
+                <input type="text" id="subName" placeholder="Server Name" required>
+                <input type="url" id="subUrl" placeholder="Git Repository URL" required>
+                <textarea id="subDesc" placeholder="Description (optional)" rows="3"></textarea>
+                <div style="display:flex; gap: 1rem; justify-content: flex-end;">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('submitModal')">Cancel</button>
+                    <button type="submit" class="btn">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Detail Modal -->
+    <div id="detailModal" class="modal">
+        <div class="modal-content" id="detailContent">
+            <!-- Details will be loaded here -->
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = '/api';
+
+        async function fetchServers(query = '') {
+            const resp = await fetch(`${API_BASE}/servers?q=${query}`);
+            const servers = await resp.json();
+            renderServers(servers);
+        }
+
+        function renderServers(servers) {
+            const list = document.getElementById('serverList');
+            list.innerHTML = servers.map(s => `
+                <div class="server-card" onclick="showDetail(${s.id})">
+                    <div class="score-badge ${getScoreClass(s.current_score)}">${s.current_score}</div>
+                    <div class="server-name">${s.name}</div>
+                    <div class="server-desc">${s.description || 'No description provided.'}</div>
+                </div>
+            `).join('');
+        }
+
+        function getScoreClass(score) {
+            if (score >= 80) return 'score-high';
+            if (score >= 50) return 'score-mid';
+            return 'score-low';
+        }
+
+        async function showDetail(id) {
+            const resp = await fetch(`${API_BASE}/servers/${id}`);
+            const s = await resp.json();
+            const latestScore = s.scores.length > 0 ? JSON.parse(s.scores[0].breakdown_json) : null;
+
+            const content = document.getElementById('detailContent');
+            content.innerHTML = `
+                <h2>${s.name}</h2>
+                <p style="color: var(--text-dim)">${s.git_url}</p>
+                <p>${s.description || ''}</p>
+                <hr style="border: 0; border-top: 1px solid #334155; margin: 1.5rem 0;">
+                <h3>Quality Score: ${s.current_score}/100</h3>
+                ${latestScore ? Object.entries(latestScore).map(([k, v]) => `
+                    <div style="margin-bottom: 1rem">
+                        <div class="score-row">
+                            <span>${k.toUpperCase()}</span>
+                            <span>${v}</span>
+                        </div>
+                        <div class="score-bar-bg">
+                            <div class="score-bar-fill" style="width: ${v * (k === 'readme' || k === 'schemas' ? 5 : k === 'handshake' ? 4 : k === 'speed' ? 6.6 : 10)}%"></div>
+                        </div>
+                    </div>
+                `).join('') : '<p>No scoring data yet.</p>'}
+                <div style="display:flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem;">
+                    <button class="btn btn-secondary" onclick="closeModal('detailModal')">Close</button>
+                    <button class="btn" onclick="triggerScore(${s.id})">Rescore</button>
+                </div>
+            `;
+            openModal('detailModal');
+        }
+
+        async function triggerScore(id) {
+            await fetch(`${API_BASE}/servers/${id}/score`, { method: 'POST' });
+            alert('Rescore triggered!');
+            closeModal('detailModal');
+        }
+
+        function openModal(id) {
+            document.getElementById(id).style.display = 'flex';
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            fetchServers(e.target.value);
+        });
+
+        document.getElementById('submitForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const data = {
+                name: document.getElementById('subName').value,
+                git_url: document.getElementById('subUrl').value,
+                description: document.getElementById('subDesc').value
+            };
+            const resp = await fetch(`${API_BASE}/servers`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            if (resp.ok) {
+                alert('Submitted successfully!');
+                closeModal('submitModal');
+                fetchServers();
+            } else {
+                const err = await resp.json();
+                alert('Error: ' + err.error);
+            }
+        });
+
+        // Initial load
+        fetchServers();
+    </script>
+</body>
+</html>

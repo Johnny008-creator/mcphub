@@ -1,0 +1,15 @@
+{
+  "name": "mcphub",
+  "private": true,
+  "description": "MCP Server Registry with automated quality scoring",
+  "scripts": {
+    "start": "node registry/index.js",
+    "cli": "node cli/index.js",
+    "scorer": "node scorer/index.js"
+  },
+  "workspaces": [
+    "registry",
+    "cli",
+    "scorer"
+  ]
+}
