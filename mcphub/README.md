@@ -2,7 +2,17 @@
 
 An open-source MCP (Model Context Protocol) server registry with automated quality scoring.
 
-![MCPHub Dashboard](https://raw.githubusercontent.com/Johnny008-creator/mcphub/master/preview.png)
+![MCPHub Demo](web/demo-banner.svg)
+
+[![GitHub License](https://img.shields.io/github/license/Johnny008-creator/mcphub)](https://github.com/Johnny008-creator/mcphub/blob/master/LICENSE)
+[![GitHub Stars](https://img.shields.io/github/stars/Johnny008-creator/mcphub)](https://github.com/Johnny008-creator/mcphub/stargazers)
+
+## Demo
+
+```bash
+# Run the interactive demo
+bash demo.sh
+```
 
 ## Features
 

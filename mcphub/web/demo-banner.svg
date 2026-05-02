@@ -1,0 +1,103 @@
+<svg width="800" height="400" viewBox="0 0 800 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&amp;display=swap');
+    
+    .bg { fill: #0d1117; }
+    .text { font-family: 'Fira Code', monospace; font-size: 14px; fill: #8b949e; }
+    .logo { font-family: 'Fira Code', monospace; font-size: 24px; font-weight: bold; fill: #00ff88; }
+    .prompt { fill: #58a6ff; }
+    .cmd { fill: #f0f6fc; }
+    .success { fill: #39d353; }
+    .score-label { fill: #f0f6fc; font-weight: bold; }
+    .bar-bg { fill: #30363d; }
+    .bar-fill { fill: #00ff88; }
+
+    .cursor {
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+
+    .typing {
+      overflow: hidden;
+      white-space: nowrap;
+      animation: typing 8s steps(40, end) infinite;
+    }
+    
+    @keyframes typing {
+      0%, 10% { width: 0; }
+      20%, 40% { width: 300px; }
+      50%, 60% { width: 0; }
+      70%, 90% { width: 350px; }
+      100% { width: 0; }
+    }
+
+    .fade-in {
+      animation: fadeIn 8s infinite;
+    }
+    @keyframes fadeIn {
+      0%, 20% { opacity: 0; }
+      25%, 45% { opacity: 1; }
+      50%, 70% { opacity: 0; }
+      75%, 95% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+
+    .slide-in {
+      animation: slideIn 4s ease-out infinite;
+    }
+    @keyframes slideIn {
+      0% { transform: translateX(-100px); opacity: 0; }
+      20%, 100% { transform: translateX(0); opacity: 1; }
+    }
+  </style>
+
+  <rect width="800" height="400" class="bg" rx="10"/>
+  
+  <text x="40" y="50" class="logo">📦 MCPHub</text>
+
+  <!-- Terminal Emulator -->
+  <rect x="40" y="80" width="720" height="180" rx="8" fill="#161b22" stroke="#30363d"/>
+  
+  <g transform="translate(60, 115)">
+    <!-- Command 1 -->
+    <text x="0" y="0" class="text prompt">$ <tspan class="cmd">mcphub search "filesystem"</tspan></text>
+    
+    <g class="fade-in">
+      <text x="0" y="25" class="text">&gt; filesystem-mcp        <tspan class="score-label">Score: 94/100</tspan>  <tspan fill="#00ff88">████████████</tspan></text>
+      <text x="0" y="45" class="text">&gt; secure-files-mcp      <tspan class="score-label">Score: 87/100</tspan>  <tspan fill="#00ff88">███████████ </tspan></text>
+      <text x="0" y="65" class="text">&gt; local-storage-mcp     <tspan class="score-label">Score: 72/100</tspan>  <tspan fill="#00ff88">█████████   </tspan></text>
+    </g>
+
+    <!-- Command 2 -->
+    <g transform="translate(0, 95)">
+       <text x="0" y="0" class="text prompt">$ <tspan class="cmd">mcphub install filesystem-mcp</tspan></text>
+       <text x="0" y="25" class="text success" style="opacity: 0; animation: fadeIn 8s infinite; animation-delay: 4s;">✓ Added to claude_desktop_config.json</text>
+    </g>
+  </g>
+
+  <!-- Score Bars -->
+  <g transform="translate(60, 290)">
+    <g class="slide-in" style="animation-delay: 0s;">
+      <text x="0" y="0" class="text score-label">README Quality</text>
+      <rect x="140" y="-12" width="200" height="15" class="bar-bg" rx="3"/>
+      <rect x="140" y="-12" width="200" height="15" class="bar-fill" rx="3"/>
+      <text x="350" y="0" class="text">20/20</text>
+    </g>
+
+    <g class="slide-in" style="animation-delay: 0.2s;">
+      <text x="0" y="30" class="text score-label">MCP Handshake</text>
+      <rect x="140" y="18" width="200" height="15" class="bar-bg" rx="3"/>
+      <rect x="140" y="18" width="170" height="15" class="bar-fill" rx="3"/>
+      <text x="350" y="30" class="text">25/25</text>
+    </g>
+
+    <g class="slide-in" style="animation-delay: 0.4s;">
+      <text x="0" y="60" class="text score-label">Security Scan</text>
+      <rect x="140" y="48" width="200" height="15" class="bar-bg" rx="3"/>
+      <rect x="140" y="48" width="100" height="15" class="bar-fill" rx="3"/>
+      <text x="350" y="60" class="text">10/10</text>
+    </g>
+  </g>
+</svg>
